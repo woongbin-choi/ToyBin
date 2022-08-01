@@ -1,4 +1,4 @@
 package com.toybin.api.controller;
 
-public class BoardController {
+public class PostController {
 }
