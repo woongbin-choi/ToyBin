@@ -1,4 +1,4 @@
 package com.toybin.api.service;
 
-public class BoardService {
+public class PostService {
 }
