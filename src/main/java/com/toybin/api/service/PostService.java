@@ -11,6 +11,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ public class PostService {
                 build();
     }
 
+    @Transactional
     public void editPost(Long id, PostEdit postEdit){
         Post post = postRepository.findById(id).
                 orElseThrow(IllegalArgumentException::new);
