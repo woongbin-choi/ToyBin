@@ -1,6 +1,7 @@
 package com.toybin.api.controller;
 
 import com.toybin.api.request.PostCreate;
+import com.toybin.api.request.PostEdit;
 import com.toybin.api.response.PostResponse;
 import com.toybin.api.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,11 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public PostResponse getPost(@PathVariable Long postId){
         return postService.getPost(postId);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit postEdit){
+        postService.editPost(postId, postEdit);
     }
 
 
