@@ -6,6 +6,7 @@ import com.toybin.api.domain.PostEditor;
 import com.toybin.api.repository.PostRepository;
 import com.toybin.api.request.PostCreate;
 import com.toybin.api.request.PostEdit;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -82,6 +87,31 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.id").value(post.getId()))
                 .andExpect(jsonPath("$.title").value("test title"))
                 .andExpect(jsonPath("$.content").value("test content"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 1페이지 조회")
+    void getAllPostsWithPaging() throws Exception {
+        //given
+        List<Post> requestPosts = IntStream.range(1,31)
+                .mapToObj(i ->
+                        Post.builder()
+                                .title("test title = " + i)
+                                .content("test content = " + i)
+                                .build()
+                )
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(requestPosts);
+
+        //expected
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=0&sort=id,desc")
+                .contentType(APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(5)))
+                .andExpect(jsonPath("$[0].id").value(30))
                 .andDo(print());
     }
 
