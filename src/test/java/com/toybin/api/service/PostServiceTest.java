@@ -120,4 +120,22 @@ class PostServiceTest {
         assertEquals("binco title", changePost.getTitle());
         assertEquals("edit content", changePost.getContent());
     }
+
+    @Test
+    @DisplayName("게시글 삭제하기")
+    void deletePost() {
+        //given
+        Post post = Post.builder().
+                title("test title").
+                content("test content")
+                .build();
+
+        postRepository.save(post);
+
+        //when
+        postService.deletePost(post.getId());
+
+        //then
+        assertEquals(0L, postRepository.count());
+    }
 }
