@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toybin.api.domain.Post;
 import com.toybin.api.repository.PostRepository;
 import com.toybin.api.request.PostCreate;
+import com.toybin.api.request.PostEdit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,6 +82,33 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.title").value("test title"))
                 .andExpect(jsonPath("$.content").value("test content"))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 제목 수정 테스트")
+    void editPost() throws Exception {
+        //given
+        Post post = Post.builder().
+                title("test title")
+                .content("test content")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder().
+                title("edit title").
+                content("test content").
+                build();
+
+        //expected
+        mockMvc.perform(MockMvcRequestBuilders.patch("/posts/{postId}", post.getId())
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(postEdit))
+        )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
     }
 
 }
