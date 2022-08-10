@@ -9,9 +9,12 @@ import com.toybin.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,6 +41,12 @@ public class PostService {
                 title(post.getTitle()).
                 content(post.getContent()).
                 build();
+    }
+
+    public List<PostResponse> getAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable).
+                stream().map(PostResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional
