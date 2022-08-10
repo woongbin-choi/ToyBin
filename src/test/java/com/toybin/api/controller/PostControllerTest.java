@@ -2,6 +2,7 @@ package com.toybin.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toybin.api.domain.Post;
+import com.toybin.api.domain.PostEditor;
 import com.toybin.api.repository.PostRepository;
 import com.toybin.api.request.PostCreate;
 import com.toybin.api.request.PostEdit;
@@ -109,6 +110,31 @@ class PostControllerTest {
                 .andDo(print());
 
 
+    }
+
+    @Test
+    @DisplayName("게시글 내용 수정 테스트")
+    void editContent() throws Exception{
+        //given
+        Post post = Post.builder().
+                title("binco title").
+                content("binco content").
+                build();
+
+        postRepository.save(post);
+
+        PostEditor postEditor = PostEditor.builder().
+                title("binco title").
+                content("edit content").
+                build();
+
+        //expected
+        mockMvc.perform(MockMvcRequestBuilders.patch("/posts/{postId}", post.getId())
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(postEditor))
+        )
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }
