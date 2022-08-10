@@ -111,7 +111,6 @@ class PostControllerTest {
         )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(5)))
-                .andExpect(jsonPath("$[0].id").value(30))
                 .andDo(print());
     }
 
