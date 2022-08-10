@@ -7,9 +7,12 @@ import com.toybin.api.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -26,6 +29,11 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public PostResponse getPost(@PathVariable Long postId){
         return postService.getPost(postId);
+    }
+
+    @GetMapping("/posts")
+    public List<PostResponse> getAllPosts(@PageableDefault(size = 5) Pageable pageable){
+        return postService.getAllPosts(pageable);
     }
 
     @PatchMapping("/posts/{postId}")
