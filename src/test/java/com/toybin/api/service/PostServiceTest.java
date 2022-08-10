@@ -3,6 +3,7 @@ package com.toybin.api.service;
 import com.toybin.api.domain.Post;
 import com.toybin.api.repository.PostRepository;
 import com.toybin.api.request.PostCreate;
+import com.toybin.api.request.PostEdit;
 import com.toybin.api.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,5 +65,32 @@ class PostServiceTest {
         assertNotNull(postResponse);
         assertEquals("test title", postResponse.getTitle());
         assertEquals("test content", postResponse.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 제목 수정하기")
+    void editTitle() {
+        //given
+        Post post = Post.builder().
+                title("test title").
+                content("test content")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder().
+                title("edit title")
+                .content("test content")
+                .build();
+
+        //when
+        postService.editPost(post.getId(), postEdit);
+
+        //then
+        Post changePost = postRepository.findById(post.getId())
+                .orElseThrow(IllegalArgumentException::new);
+
+        assertEquals("edit title", changePost.getTitle());
+        assertEquals("test content", changePost.getContent());
     }
 }
