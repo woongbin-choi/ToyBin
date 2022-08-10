@@ -93,4 +93,31 @@ class PostServiceTest {
         assertEquals("edit title", changePost.getTitle());
         assertEquals("test content", changePost.getContent());
     }
+
+    @Test
+    @DisplayName("글 내용 수정하기")
+    void editContent() {
+        //given
+        Post post = Post.builder().
+                title("binco title")
+                .content("binco content")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder().
+                title("binco title").
+                content("edit content").
+                build();
+
+        //when
+        postService.editPost(post.getId(), postEdit);
+
+        //then
+        Post changePost = postRepository.findById(post.getId())
+                .orElseThrow(IllegalArgumentException::new);
+
+        assertEquals("binco title", changePost.getTitle());
+        assertEquals("edit content", changePost.getContent());
+    }
 }
