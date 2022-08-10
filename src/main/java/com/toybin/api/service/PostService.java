@@ -53,4 +53,12 @@ public class PostService {
         post.edit(postEditor);
     }
 
+    public void deletePost(Long id){
+        Post post = postRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+
+        postRepository.delete(post);
+
+    }
+
 }
