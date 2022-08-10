@@ -2,6 +2,7 @@ package com.toybin.api.service;
 
 import com.toybin.api.domain.Post;
 import com.toybin.api.domain.PostEditor;
+import com.toybin.api.exception.PostNotFound;
 import com.toybin.api.repository.PostRepository;
 import com.toybin.api.request.PostCreate;
 import com.toybin.api.request.PostEdit;
@@ -34,7 +35,7 @@ public class PostService {
 
     public PostResponse getPost(Long id){
         Post post = postRepository.findById(id).
-                orElseThrow(IllegalArgumentException::new);
+                orElseThrow(PostNotFound::new);
 
         return PostResponse.builder().
                 id(post.getId()).
@@ -52,7 +53,7 @@ public class PostService {
     @Transactional
     public void editPost(Long id, PostEdit postEdit){
         Post post = postRepository.findById(id).
-                orElseThrow(IllegalArgumentException::new);
+                orElseThrow(PostNotFound::new);
 
         PostEditor.PostEditorBuilder postEditorBuilder = post.toEditor();
 
@@ -64,7 +65,7 @@ public class PostService {
 
     public void deletePost(Long id){
         Post post = postRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(PostNotFound::new);
 
         postRepository.delete(post);
 
