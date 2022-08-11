@@ -23,6 +23,7 @@ public class PostController {
 
     @PostMapping("/posts")
     public void addPost(@RequestBody @Valid PostCreate postCreate){
+        postCreate.validationChk();
         postService.write(postCreate);
     }
 
